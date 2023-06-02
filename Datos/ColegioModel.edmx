@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="ColegioModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
+        <EntityContainer Name="ColegioModelTargetContainer" >
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ColegioModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="ColegioModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Usuarios" EntityType="ColegioModel.Usuario" />
+          <EntitySet Name="Bitacoras" EntityType="ColegioModel.Bitacora" />
+          <AssociationSet Name="UsuarioBitacora" Association="ColegioModel.UsuarioBitacora">
+            <End Role="Usuario" EntitySet="Usuarios" />
+            <End Role="Bitacora" EntitySet="Bitacoras" />
+          </AssociationSet>
+          <EntitySet Name="Estudiantes" EntityType="ColegioModel.Estudiante" />
+          <EntitySet Name="Docentes" EntityType="ColegioModel.Docente" />
+          <EntitySet Name="Tutores" EntityType="ColegioModel.Tutor" />
+          <AssociationSet Name="TutorEstudiante" Association="ColegioModel.TutorEstudiante">
+            <End Role="Tutor" EntitySet="Tutores" />
+            <End Role="Estudiante" EntitySet="Estudiantes" />
+          </AssociationSet>
+          <EntitySet Name="Cursos" EntityType="ColegioModel.Curso" />
+          <EntitySet Name="Calificaciones" EntityType="ColegioModel.Calificacion" />
+          <AssociationSet Name="DocenteCurso" Association="ColegioModel.DocenteCurso">
+            <End Role="Docente" EntitySet="Docentes" />
+            <End Role="Curso" EntitySet="Cursos" />
+          </AssociationSet>
+          <AssociationSet Name="CursoCalificacion" Association="ColegioModel.CursoCalificacion">
+            <End Role="Curso" EntitySet="Cursos" />
+            <End Role="Calificacion" EntitySet="Calificaciones" />
+          </AssociationSet>
+          <AssociationSet Name="EstudianteCalificacion" Association="ColegioModel.EstudianteCalificacion">
+            <End Role="Estudiante" EntitySet="Estudiantes" />
+            <End Role="Calificacion" EntitySet="Calificaciones" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" />
+          <Property Name="User" Type="String" Nullable="false" />
+          <Property Name="Password" Type="String" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" />
+          <NavigationProperty Name="Bitacoras" Relationship="ColegioModel.UsuarioBitacora" FromRole="Usuario" ToRole="Bitacora" />
+          <Property Name="Rol" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Bitacora">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Fecha" Type="String" Nullable="false" />
+          <Property Name="Accion" Type="String" Nullable="false" />
+          <NavigationProperty Name="Usuario" Relationship="ColegioModel.UsuarioBitacora" FromRole="Bitacora" ToRole="Usuario" />
+          <Property Name="UsuarioId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="UsuarioBitacora">
+          <End Type="ColegioModel.Usuario" Role="Usuario" Multiplicity="1" />
+          <End Type="ColegioModel.Bitacora" Role="Bitacora" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Bitacora">
+              <PropertyRef Name="UsuarioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Estudiante">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" />
+          <Property Name="Apellido" Type="String" Nullable="false" />
+          <Property Name="FechaNac" Type="String" Nullable="false" />
+          <Property Name="Carnet" Type="String" Nullable="false" />
+          <NavigationProperty Name="Tutor" Relationship="ColegioModel.TutorEstudiante" FromRole="Estudiante" ToRole="Tutor" />
+          <Property Name="TutorId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Calificaciones" Relationship="ColegioModel.EstudianteCalificacion" FromRole="Estudiante" ToRole="Calificacion" />
+        </EntityType>
+        <EntityType Name="Docente">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombreCompleto" Type="String" Nullable="false" />
+          <Property Name="INSS" Type="String" Nullable="false" />
+          <Property Name="Salario" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Cursos" Relationship="ColegioModel.DocenteCurso" FromRole="Docente" ToRole="Curso" />
+        </EntityType>
+        <EntityType Name="Tutor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombreCompleto" Type="String" Nullable="false" />
+          <Property Name="Telf" Type="String" Nullable="false" />
+          <Property Name="Direccion" Type="String" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" />
+          <NavigationProperty Name="Estudiantes" Relationship="ColegioModel.TutorEstudiante" FromRole="Tutor" ToRole="Estudiante" />
+        </EntityType>
+        <Association Name="TutorEstudiante">
+          <End Type="ColegioModel.Tutor" Role="Tutor" Multiplicity="1" />
+          <End Type="ColegioModel.Estudiante" Role="Estudiante" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tutor">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Estudiante">
+              <PropertyRef Name="TutorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Curso">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" />
+          <Property Name="Creditos" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="Docente" Relationship="ColegioModel.DocenteCurso" FromRole="Curso" ToRole="Docente" />
+          <Property Name="DocenteId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Calificaciones" Relationship="ColegioModel.CursoCalificacion" FromRole="Curso" ToRole="Calificacion" />
+        </EntityType>
+        <EntityType Name="Calificacion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Acumulado" Type="Double" Nullable="false" />
+          <Property Name="Examen" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Curso" Relationship="ColegioModel.CursoCalificacion" FromRole="Calificacion" ToRole="Curso" />
+          <Property Name="CursoId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Estudiante" Relationship="ColegioModel.EstudianteCalificacion" FromRole="Calificacion" ToRole="Estudiante" />
+          <Property Name="EstudianteId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="DocenteCurso">
+          <End Type="ColegioModel.Docente" Role="Docente" Multiplicity="1" />
+          <End Type="ColegioModel.Curso" Role="Curso" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Docente">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Curso">
+              <PropertyRef Name="DocenteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CursoCalificacion">
+          <End Type="ColegioModel.Curso" Role="Curso" Multiplicity="1" />
+          <End Type="ColegioModel.Calificacion" Role="Calificacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Curso">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Calificacion">
+              <PropertyRef Name="CursoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="EstudianteCalificacion">
+          <End Type="ColegioModel.Estudiante" Role="Estudiante" Multiplicity="1" />
+          <End Type="ColegioModel.Calificacion" Role="Calificacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estudiante">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Calificacion">
+              <PropertyRef Name="EstudianteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
+        <Alias Key="Model" Value="ColegioModel" />
+        <Alias Key="Target" Value="ColegioModel.Store" />
+        <EntityContainerMapping CdmEntityContainer="ColegioModelContainer" StorageEntityContainer="ColegioModelTargetContainer">
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
