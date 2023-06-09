@@ -4,11 +4,166 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Namespace="ColegioModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005">
-        <EntityContainer Name="ColegioModelTargetContainer" >
-        </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+    <Schema Namespace="ColegioModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ColegioModelStoreContainer">
+    <EntitySet Name="Usuarios" EntityType="ColegioModel.Store.Usuarios" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Bitacoras" EntityType="ColegioModel.Store.Bitacoras" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Estudiantes" EntityType="ColegioModel.Store.Estudiantes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Docentes" EntityType="ColegioModel.Store.Docentes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Tutores" EntityType="ColegioModel.Store.Tutores" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Cursos" EntityType="ColegioModel.Store.Cursos" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Calificaciones" EntityType="ColegioModel.Store.Calificaciones" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="UsuarioBitacora" Association="ColegioModel.Store.UsuarioBitacora">
+      <End Role="Usuario" EntitySet="Usuarios" />
+      <End Role="Bitacora" EntitySet="Bitacoras" />
+    </AssociationSet>
+    <AssociationSet Name="TutorEstudiante" Association="ColegioModel.Store.TutorEstudiante">
+      <End Role="Tutor" EntitySet="Tutores" />
+      <End Role="Estudiante" EntitySet="Estudiantes" />
+    </AssociationSet>
+    <AssociationSet Name="DocenteCurso" Association="ColegioModel.Store.DocenteCurso">
+      <End Role="Docente" EntitySet="Docentes" />
+      <End Role="Curso" EntitySet="Cursos" />
+    </AssociationSet>
+    <AssociationSet Name="CursoCalificacion" Association="ColegioModel.Store.CursoCalificacion">
+      <End Role="Curso" EntitySet="Cursos" />
+      <End Role="Calificacion" EntitySet="Calificaciones" />
+    </AssociationSet>
+    <AssociationSet Name="EstudianteCalificacion" Association="ColegioModel.Store.EstudianteCalificacion">
+      <End Role="Estudiante" EntitySet="Estudiantes" />
+      <End Role="Calificacion" EntitySet="Calificaciones" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Usuarios">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="User" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Rol" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Bitacoras">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Fecha" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Accion" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UsuarioId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Estudiantes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Apellido" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="FechaNac" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Carnet" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="TutorId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Docentes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NombreCompleto" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="INSS" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Salario" Type="float" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Tutores">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NombreCompleto" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Telf" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Direccion" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Cursos">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Creditos" Type="smallint" Nullable="false" />
+    <Property Name="DocenteId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Calificaciones">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Acumulado" Type="float" Nullable="false" />
+    <Property Name="Examen" Type="float" Nullable="false" />
+    <Property Name="CursoId" Type="int" Nullable="false" />
+    <Property Name="EstudianteId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="UsuarioBitacora">
+    <End Role="Usuario" Type="ColegioModel.Store.Usuarios" Multiplicity="1" />
+    <End Role="Bitacora" Type="ColegioModel.Store.Bitacoras" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuario">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Bitacora">
+        <PropertyRef Name="UsuarioId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="TutorEstudiante">
+    <End Role="Tutor" Type="ColegioModel.Store.Tutores" Multiplicity="1" />
+    <End Role="Estudiante" Type="ColegioModel.Store.Estudiantes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tutor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Estudiante">
+        <PropertyRef Name="TutorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="DocenteCurso">
+    <End Role="Docente" Type="ColegioModel.Store.Docentes" Multiplicity="1" />
+    <End Role="Curso" Type="ColegioModel.Store.Cursos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Docente">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Curso">
+        <PropertyRef Name="DocenteId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CursoCalificacion">
+    <End Role="Curso" Type="ColegioModel.Store.Cursos" Multiplicity="1" />
+    <End Role="Calificacion" Type="ColegioModel.Store.Calificaciones" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Curso">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Calificacion">
+        <PropertyRef Name="CursoId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="EstudianteCalificacion">
+    <End Role="Estudiante" Type="ColegioModel.Store.Estudiantes" Multiplicity="1" />
+    <End Role="Calificacion" Type="ColegioModel.Store.Calificaciones" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Estudiante">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Calificacion">
+        <PropertyRef Name="EstudianteId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ColegioModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
@@ -184,13 +339,86 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
-        <Alias Key="Model" Value="ColegioModel" />
-        <Alias Key="Target" Value="ColegioModel.Store" />
-        <EntityContainerMapping CdmEntityContainer="ColegioModelContainer" StorageEntityContainer="ColegioModelTargetContainer">
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ColegioModelStoreContainer" CdmEntityContainer="ColegioModelContainer">
+    <EntitySetMapping Name="Usuarios">
+      <EntityTypeMapping TypeName="IsTypeOf(ColegioModel.Usuario)">
+        <MappingFragment StoreEntitySet="Usuarios">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="User" ColumnName="User" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Rol" ColumnName="Rol" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Bitacoras">
+      <EntityTypeMapping TypeName="IsTypeOf(ColegioModel.Bitacora)">
+        <MappingFragment StoreEntitySet="Bitacoras">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+          <ScalarProperty Name="Accion" ColumnName="Accion" />
+          <ScalarProperty Name="UsuarioId" ColumnName="UsuarioId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Estudiantes">
+      <EntityTypeMapping TypeName="IsTypeOf(ColegioModel.Estudiante)">
+        <MappingFragment StoreEntitySet="Estudiantes">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+          <ScalarProperty Name="FechaNac" ColumnName="FechaNac" />
+          <ScalarProperty Name="Carnet" ColumnName="Carnet" />
+          <ScalarProperty Name="TutorId" ColumnName="TutorId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Docentes">
+      <EntityTypeMapping TypeName="IsTypeOf(ColegioModel.Docente)">
+        <MappingFragment StoreEntitySet="Docentes">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="NombreCompleto" ColumnName="NombreCompleto" />
+          <ScalarProperty Name="INSS" ColumnName="INSS" />
+          <ScalarProperty Name="Salario" ColumnName="Salario" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tutores">
+      <EntityTypeMapping TypeName="IsTypeOf(ColegioModel.Tutor)">
+        <MappingFragment StoreEntitySet="Tutores">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="NombreCompleto" ColumnName="NombreCompleto" />
+          <ScalarProperty Name="Telf" ColumnName="Telf" />
+          <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cursos">
+      <EntityTypeMapping TypeName="IsTypeOf(ColegioModel.Curso)">
+        <MappingFragment StoreEntitySet="Cursos">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Creditos" ColumnName="Creditos" />
+          <ScalarProperty Name="DocenteId" ColumnName="DocenteId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Calificaciones">
+      <EntityTypeMapping TypeName="IsTypeOf(ColegioModel.Calificacion)">
+        <MappingFragment StoreEntitySet="Calificaciones">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Acumulado" ColumnName="Acumulado" />
+          <ScalarProperty Name="Examen" ColumnName="Examen" />
+          <ScalarProperty Name="CursoId" ColumnName="CursoId" />
+          <ScalarProperty Name="EstudianteId" ColumnName="EstudianteId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -204,6 +432,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
